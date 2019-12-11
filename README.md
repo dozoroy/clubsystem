@@ -2,17 +2,14 @@
 基本功能的社团管理系统
 
 ## 主界面登录
-登录:localhost:8080/#/login
-进入到localhost:8080/#/index
+ * 登录:localhost:8080/#/login
+ * 进入:localhost:8080/#/index
 
 
 ## 不可用接口：
- * http://localhost:8443/api/users/delete    delete      **删除用户**
- * http://localhost:8443/api/clubs/delete    delete      **删除社团**
- * http://localhost:8443/api/users/{userid}/clubs   **注意:已经删除**
- * http://localhost:8443/api/clubs/{clubid}/users   **注意:已经删除**
- * http://localhost:8443/api/events/{eventid}/users **注意:已经删除**
- * http://localhost:8443/api/users/{userid}/events  **注意:已经删除**
+ * http://localhost:8443/api/users/delete    delete      **存在相关信息时无法删除用户**
+ * http://localhost:8443/api/clubs/delete    delete      **存在相关信息时无法删除社团**
+
 
 ## 用户属性:
  * http://localhost:8443/api/users           alluser
@@ -65,7 +62,7 @@
 *  http://localhost:8443/api/users/{userid}/comts          **参数userid**
 *  http://localhost:8443/api/news/{newsid}/comts           **参数newsid**
 *  http://localhost:8443/api/users/{userid}/news/{newsid}/delete
-
+*  http://localhost:8443/api/content/     **参数content**
 
 ## 用户社团属性
 *  http://localhost:8443/api/userclubs    all
@@ -81,7 +78,8 @@
 *  http://localhost:8443/api/{eventid}/state      **社团活动** 
 *  http://localhost:8443/api/{userid}/mystate     **用户的社团活动与活动审批**
 
-
+## 发送加入社团欢迎邮件
+*  http://localhost:8443/api/{clubid}/send/{userid}
 
 
 
