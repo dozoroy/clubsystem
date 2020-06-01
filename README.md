@@ -1,4 +1,4 @@
-# -
+# 接口说明
 基本功能的社团管理系统
 
 ## 主界面登录
@@ -33,7 +33,7 @@
 *  http://localhost:8443/api/news          addorupdate    **参数news**
 *  http://localhost:8443/api/news/delete   delete         **参数news**
 *  http://localhost:8443/api/news/{newsid}
-*  http://localhost:8443/api/api/clubs/{clubid}/news      **参数clubid**
+*  http://localhost:8443/api/clubs/{clubid}/news      **参数clubid**
 *  http://localhost:8443/api/newsname/    **参数newsname**
 *  
 
