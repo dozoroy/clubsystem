@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lyh.ssm.crud.dao.EventMapper">
+  <resultMap id="BaseResultMap" type="com.lyh.ssm.crud.bean.Event">
+    <id column="eventid" jdbcType="INTEGER" property="eventid" />
+    <result column="eventname" jdbcType="VARCHAR" property="eventname" />
+<!--    <result column="clubid" jdbcType="INTEGER" property="clubid" />-->
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="place" jdbcType="VARCHAR" property="place" />
+    <result column="starttime" jdbcType="TIMESTAMP" property="starttime" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
+    <result column="endtime" jdbcType="TIMESTAMP" property="endtime" />
+    <association property="club" column="clubid" javaType="com.lyh.ssm.crud.bean.Club" select="com.lyh.ssm.crud.dao.ClubMapper.selectByPrimaryKey"></association>
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.lyh.ssm.crud.bean.Event">
+    <result column="eventlogo" jdbcType="LONGVARBINARY" property="eventlogo" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    eventid, eventname, clubid, content, place, starttime, state, endtime
+  </sql>
+  <sql id="Blob_Column_List">
+    eventlogo
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.lyh.ssm.crud.bean.EventExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from event
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.lyh.ssm.crud.bean.EventExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from event
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from event
+    where eventid = #{eventid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll"  resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from event
+  </select>
+  <select id="selectEventByUser" parameterType="java.lang.Integer"  resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from event
+    where clubid in (select clubid
+    from   joinclub
+    where  userid = #{userid,jdbcType=INTEGER})
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from event
+    where eventid = #{eventid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lyh.ssm.crud.bean.EventExample">
+    delete from event
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lyh.ssm.crud.bean.Event">
+    insert into event (eventid, eventname, clubid,
+      content, place, starttime,
+      state, endtime, eventlogo
+      )
+    values (#{eventid,jdbcType=INTEGER}, #{eventname,jdbcType=VARCHAR}, #{clubid,jdbcType=INTEGER},
+      #{content,jdbcType=VARCHAR}, #{place,jdbcType=VARCHAR}, #{starttime,jdbcType=TIMESTAMP},
+      #{state,jdbcType=VARCHAR}, #{endtime,jdbcType=TIMESTAMP}, #{eventlogo,jdbcType=LONGVARBINARY}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lyh.ssm.crud.bean.Event">
+    insert into event
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="eventid != null">
+        eventid,
+      </if>
+      <if test="eventname != null">
+        eventname,
+      </if>
+      <if test="clubid != null">
+        clubid,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="place != null">
+        place,
+      </if>
+      <if test="starttime != null">
+        starttime,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="endtime != null">
+        endtime,
+      </if>
+      <if test="eventlogo != null">
+        eventlogo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="eventid != null">
+        #{eventid,jdbcType=INTEGER},
+      </if>
+      <if test="eventname != null">
+        #{eventname,jdbcType=VARCHAR},
+      </if>
+      <if test="clubid != null">
+        #{clubid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="place != null">
+        #{place,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null">
+        #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="endtime != null">
+        #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eventlogo != null">
+        #{eventlogo,jdbcType=LONGVARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lyh.ssm.crud.bean.EventExample" resultType="java.lang.Long">
+    select count(*) from event
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update event
+    <set>
+      <if test="record.eventid != null">
+        eventid = #{record.eventid,jdbcType=INTEGER},
+      </if>
+      <if test="record.eventname != null">
+        eventname = #{record.eventname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clubid != null">
+        clubid = #{record.clubid,jdbcType=INTEGER},
+      </if>
+      <if test="record.content != null">
+        content = #{record.content,jdbcType=VARCHAR},
+      </if>
+      <if test="record.place != null">
+        place = #{record.place,jdbcType=VARCHAR},
+      </if>
+      <if test="record.starttime != null">
+        starttime = #{record.starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.state != null">
+        state = #{record.state,jdbcType=VARCHAR},
+      </if>
+      <if test="record.endtime != null">
+        endtime = #{record.endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.eventlogo != null">
+        eventlogo = #{record.eventlogo,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update event
+    set eventid = #{record.eventid,jdbcType=INTEGER},
+      eventname = #{record.eventname,jdbcType=VARCHAR},
+      clubid = #{record.clubid,jdbcType=INTEGER},
+      content = #{record.content,jdbcType=VARCHAR},
+      place = #{record.place,jdbcType=VARCHAR},
+      starttime = #{record.starttime,jdbcType=TIMESTAMP},
+      state = #{record.state,jdbcType=VARCHAR},
+      endtime = #{record.endtime,jdbcType=TIMESTAMP},
+      eventlogo = #{record.eventlogo,jdbcType=LONGVARBINARY}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update event
+    set eventid = #{record.eventid,jdbcType=INTEGER},
+      eventname = #{record.eventname,jdbcType=VARCHAR},
+      clubid = #{record.clubid,jdbcType=INTEGER},
+      content = #{record.content,jdbcType=VARCHAR},
+      place = #{record.place,jdbcType=VARCHAR},
+      starttime = #{record.starttime,jdbcType=TIMESTAMP},
+      state = #{record.state,jdbcType=VARCHAR},
+      endtime = #{record.endtime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lyh.ssm.crud.bean.Event">
+    update event
+    <set>
+      <if test="eventname != null">
+        eventname = #{eventname,jdbcType=VARCHAR},
+      </if>
+      <if test="clubid != null">
+        clubid = #{clubid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="place != null">
+        place = #{place,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null">
+        starttime = #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="endtime != null">
+        endtime = #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eventlogo != null">
+        eventlogo = #{eventlogo,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where eventid = #{eventid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.lyh.ssm.crud.bean.Event">
+    update event
+    set eventname = #{eventname,jdbcType=VARCHAR},
+      clubid = #{clubid,jdbcType=INTEGER},
+      content = #{content,jdbcType=VARCHAR},
+      place = #{place,jdbcType=VARCHAR},
+      starttime = #{starttime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=VARCHAR},
+      endtime = #{endtime,jdbcType=TIMESTAMP},
+      eventlogo = #{eventlogo,jdbcType=LONGVARBINARY}
+    where eventid = #{eventid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lyh.ssm.crud.bean.Event">
+    update event
+    set eventname = #{eventname,jdbcType=VARCHAR},
+      clubid = #{clubid,jdbcType=INTEGER},
+      content = #{content,jdbcType=VARCHAR},
+      place = #{place,jdbcType=VARCHAR},
+      starttime = #{starttime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=VARCHAR},
+      endtime = #{endtime,jdbcType=TIMESTAMP}
+    where eventid = #{eventid,jdbcType=INTEGER}
+  </update>
+</mapper>

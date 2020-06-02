@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lyh.ssm.crud.dao.ClubMapper">
+  <resultMap id="BaseResultMap" type="com.lyh.ssm.crud.bean.Club">
+    <id column="clubid" jdbcType="INTEGER" property="clubid" />
+    <result column="clubname" jdbcType="VARCHAR" property="clubname" />
+    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
+    <result column="founder" jdbcType="VARCHAR" property="founder" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.lyh.ssm.crud.bean.Club">
+    <result column="clublogo" jdbcType="LONGVARBINARY" property="clublogo" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    clubid, clubname, introduce, founder, createtime, state
+  </sql>
+  <sql id="Blob_Column_List">
+    clublogo
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.lyh.ssm.crud.bean.ClubExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from club
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.lyh.ssm.crud.bean.ClubExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from club
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from club
+    where clubid = #{clubid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll"  resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from club
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from club
+    where clubid = #{clubid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lyh.ssm.crud.bean.ClubExample">
+    delete from club
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lyh.ssm.crud.bean.Club">
+    insert into club (clubid, clubname, introduce,
+      founder, createtime, state,
+      clublogo)
+    values (#{clubid,jdbcType=INTEGER}, #{clubname,jdbcType=VARCHAR}, #{introduce,jdbcType=VARCHAR},
+      #{founder,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{state,jdbcType=VARCHAR},
+      #{clublogo,jdbcType=LONGVARBINARY})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lyh.ssm.crud.bean.Club">
+    insert into club
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="clubid != null">
+        clubid,
+      </if>
+      <if test="clubname != null">
+        clubname,
+      </if>
+      <if test="introduce != null">
+        introduce,
+      </if>
+      <if test="founder != null">
+        founder,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="clublogo != null">
+        clublogo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="clubid != null">
+        #{clubid,jdbcType=INTEGER},
+      </if>
+      <if test="clubname != null">
+        #{clubname,jdbcType=VARCHAR},
+      </if>
+      <if test="introduce != null">
+        #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="founder != null">
+        #{founder,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="clublogo != null">
+        #{clublogo,jdbcType=LONGVARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lyh.ssm.crud.bean.ClubExample" resultType="java.lang.Long">
+    select count(*) from club
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update club
+    <set>
+      <if test="record.clubid != null">
+        clubid = #{record.clubid,jdbcType=INTEGER},
+      </if>
+      <if test="record.clubname != null">
+        clubname = #{record.clubname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.introduce != null">
+        introduce = #{record.introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="record.founder != null">
+        founder = #{record.founder,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createtime != null">
+        createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.state != null">
+        state = #{record.state,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clublogo != null">
+        clublogo = #{record.clublogo,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update club
+    set clubid = #{record.clubid,jdbcType=INTEGER},
+      clubname = #{record.clubname,jdbcType=VARCHAR},
+      introduce = #{record.introduce,jdbcType=VARCHAR},
+      founder = #{record.founder,jdbcType=VARCHAR},
+      createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      state = #{record.state,jdbcType=VARCHAR},
+      clublogo = #{record.clublogo,jdbcType=LONGVARBINARY}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update club
+    set clubid = #{record.clubid,jdbcType=INTEGER},
+      clubname = #{record.clubname,jdbcType=VARCHAR},
+      introduce = #{record.introduce,jdbcType=VARCHAR},
+      founder = #{record.founder,jdbcType=VARCHAR},
+      createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      state = #{record.state,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lyh.ssm.crud.bean.Club">
+    update club
+    <set>
+      <if test="clubname != null">
+        clubname = #{clubname,jdbcType=VARCHAR},
+      </if>
+      <if test="introduce != null">
+        introduce = #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="founder != null">
+        founder = #{founder,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="clublogo != null">
+        clublogo = #{clublogo,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where clubid = #{clubid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.lyh.ssm.crud.bean.Club">
+    update club
+    set clubname = #{clubname,jdbcType=VARCHAR},
+      introduce = #{introduce,jdbcType=VARCHAR},
+      founder = #{founder,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=VARCHAR},
+      clublogo = #{clublogo,jdbcType=LONGVARBINARY}
+    where clubid = #{clubid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lyh.ssm.crud.bean.Club">
+    update club
+    set clubname = #{clubname,jdbcType=VARCHAR},
+      introduce = #{introduce,jdbcType=VARCHAR},
+      founder = #{founder,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=VARCHAR}
+    where clubid = #{clubid,jdbcType=INTEGER}
+  </update>
+</mapper>
