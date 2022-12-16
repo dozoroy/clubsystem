@@ -14,7 +14,7 @@
     <url>http://www.example.com</url>
 
     <properties>
-        <jar.version>4.3.8.RELEASE</jar.version>
+        <jar.version>5.2.20.RELEASE</jar.version>
     </properties>
     <dependencies>
         <!-- Spring WebMVC -->
